@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source $HOME/mnml/.mnml.conf
+clear
 centered_message "MNML Phase 1 - Started\n"
 
 centered_message "[setting up network services]"
