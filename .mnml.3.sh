@@ -1,24 +1,19 @@
 #!/usr/bin/env bash
 
 source $HOME/mnml/.mnml.conf
+centered_message "MNML Phase 3 - Started\n"
 
 if [[ -d "/sys/firmware/efi" ]] ; then
 	grub-install --efi-directory=/boot ${MNMLDISK}
 fi
 
-echo -ne "
-\033[0;31m[generating grub configuration]\033[0m
-"
+centered_message "[generating grub configuration]"
 grub-mkconfig -o /boot/grub/grub.cfg
 
-echo -ne "
-\033[0;31m[enabling services]\033[0m
-"
+centered_message "[enabling services]"
 systemctl enable NetworkManager.service
 
-echo -ne "
-\033[0;31m[cleaning up]\033[0m
-"
+centered_message "[cleaning up]"
 sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 sed -i "s/^$MNMLUSER ALL=(ALL:ALL) NOPASSWD: ALL/# $MNMLUSER ALL=(ALL:ALL) NOPASSWD: ALL/" /etc/sudoers
