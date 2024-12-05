@@ -26,6 +26,7 @@ set -a
 MNMLDIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set +a
 
+chmod +x $MNMLDIR/*.sh
 bash $MNMLDIR/.mnml.start.sh
 source $MNMLDIR/.mnml.conf
 bash $MNMLDIR/.mnml.0.sh
