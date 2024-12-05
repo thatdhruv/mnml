@@ -29,6 +29,6 @@ set +a
 bash $MNMLDIR/.mnml.start.sh
 source $MNMLDIR/.mnml.conf
 bash $MNMLDIR/.mnml.0.sh
-arch-chroot /mnt $HOME/MNML/.mnml.1.sh
-arch-chroot /mnt /usr/bin/runuser -u $MNMLUSER -- /home/$MNMLUSER/MNML/.mnml.2.sh
-arch-chroot /mnt $HOME/MNML/.mnml.3.sh
+arch-chroot /mnt $HOME/mnml/.mnml.1.sh
+arch-chroot /mnt /usr/bin/runuser -u $MNMLUSER -- /home/$MNMLUSER/mnml/.mnml.2.sh
+arch-chroot /mnt $HOME/mnml/.mnml.3.sh
