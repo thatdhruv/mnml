@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 source $HOME/mnml/.mnml.conf
+centered_message "MNML Phase 2 - Started\n"
 
-echo -ne "
-\033[0;31m[setting up graphical environment]\033[0m
-"
+centered_message "[setting up graphical environment]"
 cd $MNMLDIR/dmenu
 make
 sudo make install
@@ -20,6 +19,4 @@ sudo make install
 cp -r $MNMLDIR/dotfiles/. $HOME/.
 chmod +x $HOME/.scripts/*.sh
 
-echo -ne "
-\033[0;31m[ready for phase 3]\033[0m
-"
+centered_message "MNML Phase 2 - Completed! Proceeding Towards Phase 3..."
