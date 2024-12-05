@@ -15,7 +15,7 @@ reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 mkdir /mnt &>/dev/null
 
 centered_message "[formatting disks]"
-umount -A --recursive /mnt
+umount -A --recursive /mnt &>/dev/null
 sgdisk -Z ${MNMLDISK}
 sgdisk -a 2048 -o ${MNMLDISK}
 sgdisk -n 1::+1M --typecode=1:ef02 --change-name=1:'BIOSBOOT' ${MNMLDISK}
@@ -51,7 +51,7 @@ fi
 centered_message "[installing the base system]"
 pacstrap /mnt base base-devel linux linux-firmware archlinux-keyring sudo vim --needed --noconfirm
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
-cp -R ${MNMLDIR} /mnt/root/mnml
+cp -R ${MNMLDIR} /mnt/root/
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 genfstab -L /mnt >> /mnt/etc/fstab
 
