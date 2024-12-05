@@ -51,7 +51,7 @@ fi
 centered_message "[installing the base system]"
 pacstrap /mnt base base-devel linux linux-firmware archlinux-keyring sudo vim --needed --noconfirm
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
-cp -R ${MNMLDIR} /mnt/root/MNML
+cp -R ${MNMLDIR} /mnt/root/mnml
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 genfstab -L /mnt >> /mnt/etc/fstab
 
