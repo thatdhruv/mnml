@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source $HOME/mnml/.mnml.conf
+clear
 centered_message "MNML Phase 2 - Started\n"
 
 centered_message "[setting up graphical environment]"
