@@ -3,7 +3,19 @@
 config=$MNMLDIR/.mnml.conf
 if [ ! -f $config ] ; then
 	touch -f $config
+ 	cat << EOF >> "$config"
+centered_message() {
+	local message="\$1"
+ 	local width=\$(tput cols)
+  	local message_length=\${#message}
+   	local padding=\$(( (\$width-\$message_length)/2 ))
+
+    	echo -en "\033[0;31m\$(printf '%*s' \$padding '')\$message\033[0m"
+     	echo
+}
+EOF
 fi
+source $config
 
 set_option() {
 	if grep -Eq "^${1}.*" $config ; then
@@ -63,8 +75,12 @@ timezone() {
 }
 
 clear
+centered_message "Welcome to MNML - A Minimal Arch Setup!\n"
 user_info
 clear
+centered_message "Welcome to MNML - A Minimal Arch Setup!\n"
 disk_info
 clear
+centered_message "Welcome to MNML - A Minimal Arch Setup!\n"
 timezone
+clear
