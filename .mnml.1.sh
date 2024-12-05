@@ -38,7 +38,7 @@ while read line
 do
 	echo "[installing ${line}]"
 	sudo pacman -S --needed --noconfirm ${line}
-done < $MNMLDIR/packs.txt
+done < $MNMLDIR/.mnml.pkgs
 
 echo -ne "
 \033[0;31m[installing microcode]\033[0m
