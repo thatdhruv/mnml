@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source $HOME/mnml/.mnml.conf
+clear
 centered_message "MNML Phase 3 - Started\n"
 
 if [[ -d "/sys/firmware/efi" ]] ; then
