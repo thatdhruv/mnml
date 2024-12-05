@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $HOME/mnml/setup.conf
+source $HOME/mnml/.mnml.conf
 
 echo -ne "
 \033[0;31m[setting up network services]\033[0m
