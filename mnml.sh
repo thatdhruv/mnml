@@ -32,3 +32,5 @@ bash $MNMLDIR/.mnml.0.sh
 arch-chroot /mnt $HOME/mnml/.mnml.1.sh
 arch-chroot /mnt /usr/bin/runuser -u $MNMLUSER -- /home/$MNMLUSER/mnml/.mnml.2.sh
 arch-chroot /mnt $HOME/mnml/.mnml.3.sh
+
+centered_message "MNML Phase 3 - Completed! Please Eject Install Media and Reboot..."
