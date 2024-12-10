@@ -84,6 +84,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *firefoxcmd[] = { "firefox", NULL };
 static const char *mutecmd[] = { "pamixer", "-t", NULL };
 static const char *poweroffcmd[] = { "poweroff", NULL };
+static const char *scrotcmd[] = { "scrot", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -125,6 +126,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_w,      spawn,           {.v = firefoxcmd} },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,           {.v = mutecmd} },
 	{ MODKEY|ShiftMask,             XK_p,      spawn,           {.v = poweroffcmd} },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,           {.v = scrotcmd} },
 };
 
 /* button definitions */
