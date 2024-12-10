@@ -9,4 +9,20 @@ mnml is a lightweight and customizable Arch setup designed for minimalism enthus
 
 ## Installation
 To get started, simply run the following from the Arch installer:
-`bash <(curl -L raw.githubusercontent.com/thatdhruv/mnml/HEAD/install.sh)`
+```bash
+bash <(curl -L raw.githubusercontent.com/thatdhruv/mnml/HEAD/install.sh)
+```
+
+## Getting Started
+mnml uses the default dwm key bindings with modifier (`Mod`) being the `⌘ (Cmd) | ❖ (Super) | ⊞ (Win)` key depending on your platform. For example, you can get started by opening a terminal session, or launching programs as:
+- `Mod + Shift + Return`: Launch a terminal session
+- `Mod + P`: Launch dmenu (program launcher)
+
+In addition to the default key bindings, mnml includes these additional key bindings for ease of use:
+- `Mod + Shift + M`: Mute or unmute the system volume
+- `Mod + Shift + P`: Shut the system down (use with caution)
+- `Mod + Shift + S`: Take a screenshot (saved to the user's home directory)
+- `Mod + Shift + W`: Open firefox
+- `Mod + S`: Toggle the system color scheme (default is dark)
+
+You can add your own key bindings by editing the sources.
