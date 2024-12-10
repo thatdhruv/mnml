@@ -14,7 +14,7 @@ bash <(curl -L raw.githubusercontent.com/thatdhruv/mnml/HEAD/install.sh)
 ```
 
 ## Getting Started
-mnml uses the default dwm key bindings with modifier (`Mod`) being the `⌘ (Cmd) | ❖ (Super) | ⊞ (Win)` key depending on your platform. For example, you can get started by opening a terminal session, or launching programs as:
+mnml uses the default dwm key bindings with the modifier (`Mod`) key being the `⌘ (Cmd) | ❖ (Super) | ⊞ (Win)` key depending on your platform. For example, you can get started by opening a terminal session, or launching programs as:
 - `Mod + Shift + Return`: Launch a terminal session
 - `Mod + P`: Launch dmenu (program launcher)
 
