@@ -25,4 +25,4 @@ In addition to the default key bindings, mnml includes these additional key bind
 - `Mod + Shift + W`: Open firefox
 - `Mod + S`: Toggle the system color scheme (default is dark)
 
-You can add your own key bindings by editing the sources.
+You can add your own key bindings, or modify the current key bindings by editing the sources.
