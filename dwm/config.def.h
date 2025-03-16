@@ -12,7 +12,7 @@ static const char col_acc_dark[]    = "#cc6666";
 static const char col_bg_dark[]     = "#222222";
 static const char col_fg_dark[]     = "#ffffff";
 
-static const char col_acc_light[]   = "#0040dd";
+static const char col_acc_light[]   = "#007aff";
 static const char col_bg_light[]    = "#ffffff";
 static const char col_fg_light[]    = "#222222";
 
