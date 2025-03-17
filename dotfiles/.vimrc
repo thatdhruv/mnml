@@ -40,6 +40,19 @@ let g:AutoPairsFlyMode = 1
 
 let g:user_emmet_expandabbr_key = '<Tab>'
 
+let g:coc_global_extensions = [
+  \ 'coc-css',
+  \ 'coc-clangd',
+  \ 'coc-html',
+  \ 'coc-pyright',
+  \ 'coc-tsserver'
+\]
+
+augroup CocUser
+  autocmd!
+  autocmd VimEnter * CocInstall --sync
+augroup END
+
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
