@@ -1,0 +1,14 @@
+[global]
+background = "#222222"
+foreground = "#ffffff"
+font = Terminess Nerd Font Mono 10
+
+[frame]
+border_color = "#cc6666"
+
+[body]
+background = "#222222"
+foreground = "#ffffff"
+
+[notification]
+frame_color = "#cc6666"
