@@ -12,6 +12,8 @@ libxinerama
 linux-headers
 mpv
 neofetch
+nodejs
+npm
 pamixer
 picom
 pulseaudio
