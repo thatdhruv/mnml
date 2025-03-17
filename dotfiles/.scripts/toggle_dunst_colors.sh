@@ -5,7 +5,7 @@ DUNSTRC="$HOME/.config/dunst/dunstrc"
 if grep -q "background = \"#222222\"" "$DUNSTRC"; then
   cat > "$DUNSTRC" << EOF
 [global]
-background = "#ffffff"
+background = "#e5e5ea"
 foreground = "#222222"
 font = Terminess Nerd Font Mono 10
 
@@ -13,7 +13,7 @@ font = Terminess Nerd Font Mono 10
 border_color = "#007aff"
 
 [body]
-background = "#ffffff"
+background = "#e5e5ea"
 foreground = "#222222"
 
 [notification]
