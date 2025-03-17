@@ -10,7 +10,7 @@ mnml is a lightweight and customizable Arch setup designed for minimalism enthus
 ## Installation
 To get started, simply run the following from the Arch installer:
 ```bash
-bash <(curl -L raw.githubusercontent.com/thatdhruv/mnml/HEAD/install.sh)
+bash <(curl -L raw.githubusercontent.com/thatdhruv/mnml/master/install.sh)
 ```
 
 ## Getting Started
