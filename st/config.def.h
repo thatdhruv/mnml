@@ -183,7 +183,7 @@ static MouseShortcut mshortcuts[] = {
 };
  
 /* Internal keyboard shortcuts. */
-#define MODKEY Mod1Mask
+#define MODKEY Mod1Mask /* Mod1Mask = Alt/Opt/Meta, Mod4Mask = Cmd/Super/Win */
 #define TERMMOD (ControlMask|ShiftMask)
  
 static Shortcut shortcuts[] = {
