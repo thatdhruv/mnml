@@ -1576,12 +1576,8 @@ setscheme(const Arg *arg)
 		system("pkill dunst");
 		system("$HOME/.scripts/toggle_dunst_colors.sh");
 		system("dunst &");
-	} else {
-		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
-		system("pkill dunst");
+	} else
 		system("$HOME/.scripts/toggle_dunst_colors.sh");
-		system("dunst &");
-	}
 }
 
 void
