@@ -17,4 +17,7 @@ alias n="neofetch"
 alias r="ranger"
 alias u="sudo pacman -R --noconfirm"
 alias v="vim"
+
+alias vb="vim ~/.bashrc"
+alias vc="vim ~/.vimrc"
 ### end of user-defined alises ###
