@@ -60,3 +60,4 @@ inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap <C-n> :NERDTreeToggle<CR>
 
 autocmd VimEnter * if empty(glob('~/.vim/plugged')) | PlugInstall | source $MYVIMRC | endif
+autocmd VimEnter * if empty(glob('~/.vim/plugged/coc.nvim/build/index.js')) | execute '!cd ~/.vim/plugged/coc.nvim && npm ci' | endif
