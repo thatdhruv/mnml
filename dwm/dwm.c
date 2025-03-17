@@ -1574,9 +1574,11 @@ setscheme(const Arg *arg)
 	if (strcmp(dmenucmd[10], col_acc_light) == 0) {
 		system("feh --bg-scale $HOME/.wallpaper.light.jpg");
 		system("dunstctl reload $HOME/.config/dunst/light");
+		system("pidof st | xargs kill -s USR1");
 	} else  {
 		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
 		system("dunstctl reload $HOME/.config/dunst/dark");
+		system("pidof st | xargs kill -s USR1");
 	}
 }
 
