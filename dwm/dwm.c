@@ -1573,14 +1573,10 @@ setscheme(const Arg *arg)
 	
 	if (strcmp(dmenucmd[10], col_acc_light) == 0) {
 		system("feh --bg-scale $HOME/.wallpaper.light.jpg");
-		system("pkill dunst");
-		system("$HOME/.scripts/toggle_dunst_colors.sh");
-		system("dunst &");
+		system("dunstctl reload $HOME/.config/dunst/light");
 	} else  {
 		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
-		system("pkill dunst");
-		system("$HOME/.scripts/toggle_dunst_colors.sh");
-		system("dunst &");
+		system("dunstctl reload $HOME/.config/dunst/dark");
 	}
 }
 
