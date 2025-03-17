@@ -93,46 +93,45 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
  
-/* Terminal colors (16 first used in escape sequence) */
-static const char *colorname[] = {
-	/* 8 normal colors */
-	"#282828",
-	"#cc241d",
-	"#98971a",
-	"#d79921",
-	"#458588",
-	"#b16286",
-	"#689d6a",
-	"#a89984",
- 
-	/* 8 bright colors */
-	"#928374",
-	"#fb4934",
-	"#b8bb26",
-	"#fabd2f",
-	"#83a598",
-	"#d3869b",
-	"#8ec07c",
-	"#ebdbb2",
- 
-	[255] = 0,
- 
-	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
-	"gray90", /* default foreground colour */
-	"black", /* default background colour */
+typedef struct {
+	const char* const colors[258]; /* terminal colors */
+	unsigned int fg;               /* foreground */
+	unsigned int bg;               /* background */
+	unsigned int cs;               /* cursor */
+	unsigned int rcs;              /* reverse cursor */
+} ColorScheme;
+/*
+ * Terminal colors (16 first used in escape sequence,
+ * 2 last for custom cursor color),
+ * foreground, background, cursor, reverse cursor
+ */
+static const ColorScheme schemes[] = {
+	// Gruvbox dark
+	{{"#000000", "#cc241d", "#98971a", "#d79921",
+	  "#458588", "#b16286", "#689d6a", "#a89984",
+	  "#928374", "#fb4934", "#b8bb26", "#fabd2f",
+	  "#83a598", "#d3869b", "#8ec07c", "#e5e5e5",
+	  [256]="#e5e5e5", "#555555"}, 15, 0, 256, 257},
+
+	// Gruvbox light
+	{{"#e5e5e5", "#cc241d", "#98971a", "#d79921",
+	  "#458588", "#b16286", "#689d6a", "#7c6f64",
+	  "#928374", "#9d0006", "#79740e", "#b57614",
+	  "#076678", "#8f3f71", "#427b58", "#000000",
+	  [256]="#000000", "#555555"}, 15, 0, 256, 257},
 };
  
+static const char * const * colorname;
+int colorscheme = 0;
  
 /*
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 258;
-unsigned int defaultbg = 259;
-unsigned int defaultcs = 256;
-static unsigned int defaultrcs = 257;
+unsigned int defaultfg;
+unsigned int defaultbg;
+unsigned int defaultcs;
+static unsigned int defaultrcs;
  
 /*
  * Default shape of cursor
@@ -201,6 +200,17 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+	{ MODKEY,               XK_1,           selectscheme,   {.i =  0} },
+	{ MODKEY,               XK_2,           selectscheme,   {.i =  1} },
+	{ MODKEY,               XK_3,           selectscheme,   {.i =  2} },
+	{ MODKEY,               XK_4,           selectscheme,   {.i =  3} },
+	{ MODKEY,               XK_5,           selectscheme,   {.i =  4} },
+	{ MODKEY,               XK_6,           selectscheme,   {.i =  5} },
+	{ MODKEY,               XK_7,           selectscheme,   {.i =  6} },
+	{ MODKEY,               XK_8,           selectscheme,   {.i =  7} },
+	{ MODKEY,               XK_9,           selectscheme,   {.i =  8} },
+	{ MODKEY,               XK_0,           nextscheme,     {.i = +1} },
+	{ MODKEY|ControlMask,   XK_0,           nextscheme,     {.i = -1} },
 };
  
 /*
