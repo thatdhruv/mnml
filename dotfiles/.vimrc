@@ -15,7 +15,7 @@ cal plug#begin('~/.vim/plugged')
   Plug 'preservim/nerdtree'
 
   Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vir-airline-themes'
+  Plug 'vim-airline/vim-airline-themes'
 
   Plug 'neoclide/coc.nvim'
 
