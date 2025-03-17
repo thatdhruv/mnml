@@ -1571,16 +1571,17 @@ setscheme(const Arg *arg)
 	dmenucmd[10] = xftcolor_to_hex(scheme[SchemeSel][1]);
 	dmenucmd[12] = xftcolor_to_hex(scheme[SchemeSel][0]);
 	
-	if (strcmp(dmenucmd[10], col_acc_light) == 0)
+	if (strcmp(dmenucmd[10], col_acc_light) == 0) {
 		system("feh --bg-scale $HOME/.wallpaper.light.jpg");
 		system("pkill dunst");
 		system("$HOME/.scripts/toggle_dunst_colors.sh");
 		system("dunst &");
-	else
+	} else {
 		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
 		system("pkill dunst");
 		system("$HOME/.scripts/toggle_dunst_colors.sh");
 		system("dunst &");
+	}
 }
 
 void
