@@ -7,7 +7,7 @@ centered_message "MNML Phase 1 - Started\n"
 centered_message "[setting up network services]"
 sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 pacman -S --noconfirm networkmanager grub git
-systemctl enable --now NetworkManager
+systemctl enable NetworkManager
 
 nc=$(grep -c ^processor /proc/cpuinfo)
 centered_message "[setting up makeflags and compression settings for "$nc" cores]"
