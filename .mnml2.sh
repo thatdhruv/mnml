@@ -136,7 +136,7 @@ bind = ALT, 9, workspace, 9
 
 exec-once = mako &
 exec-once = waybar &
-exec-once = swww init && swww img ~/.wallpaper.jpeg
+exec-once = swww-daemon && swww img ~/.wallpaper.jpeg
 HYPRCONF
 
 cat <<WAYBARCONFIG > ${CONFIG_DIR}/waybar/config
@@ -267,6 +267,7 @@ alias ws="nvim ~/.config/waybar/style.css"
 BASHRC
 
 curl -o /mnt/home/${2}/.wallpaper.jpeg https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg
+mkdir -p /mnt/home/${2}/.cache
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
 umount -R /mnt
 
