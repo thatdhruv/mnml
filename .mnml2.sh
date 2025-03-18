@@ -85,7 +85,7 @@ arch-chroot /mnt pacman -Sy --noconfirm --needed hyprland waybar foot wofi mako 
 CONFIG_DIR="/mnt/home/${2}/.config"
 mkdir -p ${CONFIG_DIR}/{hypr,waybar,foot}
 
-cat <<'EOF' > ${CONFIG_DIR}/hypr/hyprland.conf
+cat <<HYPRCONF > ${CONFIG_DIR}/hypr/hyprland.conf
 general {
 	gaps_in = 2
 	gaps_out = 1
@@ -137,9 +137,9 @@ bind = ALT, 9, workspace, 9
 exec-once = mako &
 exec-once = waybar &
 exec-once = swww init && swww img ~/.wallpaper.jpeg
-EOF
+HYPRCONF
 
-cat <<'EOF' > ${CONFIG_DIR}/waybar/config
+cat <<WAYBARCONFIG > ${CONFIG_DIR}/waybar/config
 {
 	"height": 20,
 	"layer": "top",
@@ -164,9 +164,9 @@ cat <<'EOF' > ${CONFIG_DIR}/waybar/config
 		"interval": 1
 	}
 }
-EOF
+WAYBARCONFIG
 
-cat <<'EOF' > ${CONFIG_DIR}/waybar/style.css
+cat <<WAYBARSTYLE > ${CONFIG_DIR}/waybar/style.css
 * {
 	border: none;
 	min-height: 0px;
@@ -189,9 +189,9 @@ cat <<'EOF' > ${CONFIG_DIR}/waybar/style.css
 	padding: 0px 4px;
 	margin: 0px 2px;
 }
-EOF
+WAYBARSTYLE
 
-cat <<'EOF' > ${CONFIG_DIR}/foot/foot.ini
+cat <<FOOT > ${CONFIG_DIR}/foot/foot.ini
 [main]
 font = JetBrains Mono Nerd Font Mono:size=8
 shell = /bin/bash
@@ -222,9 +222,9 @@ bright7 = ebdbb2
 [scrollback]
 lines = 10000
 multiplier = 3
-EOF
+FOOT
 
-cat <<'EOF' >> /mnt/home/${2}/.bash_profile
+cat <<BASHPROFILE >> /mnt/home/${2}/.bash_profile
 if [[ "$(tty)" = "/dev/tty1" ]]; then
  	setfont ter-v16b
 
@@ -248,9 +248,9 @@ if [[ "$(tty)" = "/dev/tty1" ]]; then
 
 	exec Hyprland
 fi
-EOF
+BASHPROFILE
 
-cat <<'EOF' >> /mnt/home/${2}/.bashrc
+cat <<BASHRC >> /mnt/home/${2}/.bashrc
 alias c="cp -r"
 alias d="rm -rf"
 alias g="git clone"
@@ -264,11 +264,11 @@ alias fb="nvim ~/.config/foot/foot.ini"
 alias vh="nvim ~/.config/hypr/hyprland.conf"
 alias wc="nvim ~/.config/waybar/config"
 alias ws="nvim ~/.config/waybar/style.css"
-EOF
+BASHRC
 
 curl -o /mnt/home/${2}/.wallpaper.jpeg https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
-unmount -R /mnt
+umount -R /mnt
 
 clear
 echo "Installation complete! You can now reboot into your new mnml2 system."
