@@ -15,9 +15,9 @@ alias i="sudo pacman -S --needed --noconfirm"
 alias l="eza -al --icons"
 alias n="neofetch"
 alias r="ranger"
-alias u="sudo pacman -R --noconfirm"
-alias v="vim"
+alias u="sudo pacman -R --noconfirm -ss"
+alias v="vim --servername VIM"
 
-alias vb="vim ~/.bashrc"
-alias vc="vim ~/.vimrc"
+alias vb="vim --servername VIM ~/.bashrc"
+alias vc="vim --servername VIM ~/.vimrc"
 ### end of user-defined alises ###
