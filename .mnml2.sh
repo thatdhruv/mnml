@@ -39,6 +39,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt /bin/bash <<EOF
 ln -sf /usr/share/zoneinfo/${5} /etc/localtime
 hwclock --systohc
+timedatectl set-ntp true
 
 echo "${LOCALE} UTF-8" > /etc/locale.gen
 locale-gen
