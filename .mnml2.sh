@@ -44,10 +44,10 @@ echo "${LOCALE} UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=${LOCALE}" > /etc/locale.conf
 
-echo "${4}" > /etc/4
+echo "${4}" > /etc/hostname
 cat <<HOSTS >/etc/hosts
 127.0.0.1	localhost
-::1			localhost
+::1		localhost
 127.0.1.1	${4}.localdomain ${4}
 HOSTS
 
