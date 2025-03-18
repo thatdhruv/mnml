@@ -1,7 +1,7 @@
 [global]
 background = "#222222"
 foreground = "#ffffff"
-font = Terminess Nerd Font Mono 10
+font = JetBrains Mono Nerd Font Mono 12
 
 [frame]
 border_color = "#cc6666"
