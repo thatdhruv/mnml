@@ -1270,7 +1270,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 	ushort mode = glyphs[0].mode & ~ATTR_WRAP;
 	Font *font = &dc.font;
 	int frcflags = FRC_NORMAL;
-	float runewidth = win.cw * ((glyphs[0].mode & ATTR_WIDE) ? 2.0f : 1.0f;
+	float runewidth = win.cw * ((glyphs[0].mode & ATTR_WIDE) ? 2.0f : 1.0f);
 	Rune rune;
 	FT_UInt glyphidx;
 	FcResult fcres;
