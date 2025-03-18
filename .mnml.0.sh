@@ -49,7 +49,7 @@ if ! grep -qs '/mnt' /proc/mounts ; then
 fi
 
 centered_message "[installing the base system]"
-pacstrap /mnt base base-devel linux linux-firmware archlinux-keyring sudo vim --needed --noconfirm
+pacstrap /mnt base base-devel linux linux-firmware archlinux-keyring sudo --needed --noconfirm
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp -R ${MNMLDIR} /mnt/root/
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
