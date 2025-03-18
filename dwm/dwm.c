@@ -1576,11 +1576,13 @@ setscheme(const Arg *arg)
 		system("dunstctl reload $HOME/.config/dunst/light");
 		system("pidof st | xargs kill -s USR1");
 		system("sed -i 's/^set background=dark/set background=light/' $HOME/.vimrc");
+		system("vim --servername VIM --remote-send '<Esc>:source $MYVIMRC<CR>'");
 	} else  {
 		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
 		system("dunstctl reload $HOME/.config/dunst/dark");
 		system("pidof st | xargs kill -s USR1");
 		system("sed -i 's/^set background=light/set background=dark/' $HOME/.vimrc");
+		system("vim --servername VIM --remote-send '<Esc>:source $MYVIMRC<CR>'");
 	}
 }
 
