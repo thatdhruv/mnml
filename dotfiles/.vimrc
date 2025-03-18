@@ -61,3 +61,19 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 
 autocmd VimEnter * if empty(glob('~/.vim/plugged')) | PlugInstall | source $MYVIMRC | endif
 autocmd VimEnter * if empty(glob('~/.vim/plugged/coc.nvim/build/index.js')) | execute '!cd ~/.vim/plugged/coc.nvim && npm ci' | endif
+
+let g:vimrc_time = getftime($MYVIMRC)
+set updatetime=500
+
+if !exists('*ReloadVimrcIfModified')
+  function! ReloadVimrcIfModified()
+    let current_time = getftime($MYVIMRC)
+
+    if current_time > g:vimrc_time
+      let g:vimrc_time = current_time
+      source $MYVIMRC
+    endif
+
+    call feedkeys("lh")
+  endfunction
+endif
