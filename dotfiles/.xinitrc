@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-picom -b
-feh --bg-scale .wallpaper.dark.jpg
-slstatus &
 dunst -conf "~/.config/dunst/dark" &
+feh --bg-scale .wallpaper.dark.jpg
+picom -b
+slstatus &
 
 exec dwm
