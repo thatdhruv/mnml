@@ -77,3 +77,8 @@ if !exists('*ReloadVimrcIfModified')
     call feedkeys("lh")
   endfunction
 endif
+
+augroup vimrc_reload
+  autocmd!
+  autocmd CursorHold * call ReloadVimrcIfModified()
+augroup END
