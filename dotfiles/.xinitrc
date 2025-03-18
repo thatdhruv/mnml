@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dunst &
+dunst -conf ~/.config/dunst/dark &
 feh --bg-scale .wallpaper.dark.jpg
 picom -b
 slstatus &
