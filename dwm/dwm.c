@@ -1575,10 +1575,12 @@ setscheme(const Arg *arg)
 		system("feh --bg-scale $HOME/.wallpaper.light.jpg");
 		system("dunstctl reload $HOME/.config/dunst/light");
 		system("pidof st | xargs kill -s USR1");
+		system("sed -i 's/^set background=dark/set background=light/' $HOME/.vimrc");
 	} else  {
 		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
 		system("dunstctl reload $HOME/.config/dunst/dark");
 		system("pidof st | xargs kill -s USR1");
+		system("sed -i 's/^set background=light/set background=dark/' $HOME/.vimrc");
 	}
 }
 
