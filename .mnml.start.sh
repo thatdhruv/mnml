@@ -10,7 +10,7 @@ centered_message() {
   	local message_length=\${#message}
    	local padding=\$(( (\$width-\$message_length)/2 ))
 
-    	echo -en "\033[0;31m\$(printf '%*s' \$padding '')\$message\033[0m"
+    	echo -en "\033[0;32m\$(printf '%*s' \$padding '')\$message\033[0m"
      	echo
 }
 EOF
