@@ -48,7 +48,7 @@ echo "LANG=${LOCALE}" > /etc/locale.conf
 echo "${4}" > /etc/hostname
 cat <<HOSTS >/etc/hosts
 127.0.0.1	localhost
-::1		localhost
+::1			localhost
 127.0.1.1	${4}.localdomain ${4}
 HOSTS
 
@@ -197,7 +197,6 @@ cat <<FOOT > ${CONFIG_DIR}/foot/foot.ini
 [main]
 font = JetBrains Mono Nerd Font Mono:size=8
 shell = /bin/bash
-word-delimiters = " /\\()\"'-.,:;<>~!@#$%^&*+=[]{}~?'"
 
 [colors]
 foreground = dcdcdc
@@ -372,6 +371,8 @@ alias u="sudo pacman -R --noconfirm -ss"
 alias v="nvim"
 
 alias vb="nvim ~/.bashrc"
+alias vp="nvim ~/.bash_profile"
+alias vc="nvim ~/.config/nvim/init.lua"
 alias fb="nvim ~/.config/foot/foot.ini"
 alias vh="nvim ~/.config/hypr/hyprland.conf"
 alias wc="nvim ~/.config/waybar/config"
