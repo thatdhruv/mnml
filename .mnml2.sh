@@ -137,7 +137,8 @@ bind = ALT, 9, workspace, 9
 
 exec-once = mako &
 exec-once = waybar &
-exec-once = swww-daemon && swww img ~/.wallpaper.jpeg
+exec-once = swww-daemon &
+exec-once = swww img ~/.wallpaper.jpeg
 HYPRCONF
 
 cat <<WAYBARCONFIG > ${CONFIG_DIR}/waybar/config
@@ -328,17 +329,6 @@ vim.o.smartindent = true
 vim.o.softtabstop = 4
 vim.o.tabstop = 4
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    local packer_compiled = vim.fn.stdpath("config") .. "/plugin/packer_compiled.lua"
-    if not vim.loop.fs_stat(packer_compiled) then
-      vim.cmd("PackerSync")
-      vim.cmd("MasonUpdate")
-      vim.cmd("TSUpdateSync")
-    end
-  end
-})
-
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap('n', '<Leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
@@ -392,6 +382,7 @@ curl -o /mnt/home/${2}/.wallpaper.jpeg https://images.pexels.com/photos/1183099/
 mkdir -p /mnt/home/${2}/.cache
 arch-chroot /mnt git clone --depth 1 https://github.com/wbthomason/packer.nvim /home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
+arch-chroot /mnt runuser -u ${2} -- nvim --headless +PackerSync +qa
 umount -R /mnt
 
 clear
