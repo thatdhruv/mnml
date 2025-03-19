@@ -249,6 +249,7 @@ require('packer').startup(function()
    	use 'tpope/vim-fugitive'
        	use 'kyazdani42/nvim-web-devicons'
  	use 'folke/tokyonight.nvim'
+  	use 'morhetz/gruvbox'
   	use 'windwp/nvim-autopairs'
 end)
 
@@ -289,7 +290,7 @@ require'nvim-treesitter.configs'.setup {
 
  require('lualine').setup({
  	options = {
-  		theme = 'tokyonight',
+  		theme = 'gruvbox',
     		section_separators = '',
       		component_separators = '|',
 	},
@@ -318,7 +319,7 @@ require'nvim-treesitter.configs'.setup {
 
 require("nvim-autopairs").setup({})
 
-vim.cmd[[colorscheme tokyonight]]
+vim.cmd[[colorscheme gruvbox]]
 
 vim.o.autoindent = true
 vim.o.number = true
