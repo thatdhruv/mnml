@@ -390,7 +390,7 @@ BASHRC
 
 curl -o /mnt/home/${2}/.wallpaper.jpeg https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg
 mkdir -p /mnt/home/${2}/.cache
-git clone --depth 1 https://github.com/wbthomason/packer.nvim /mnt/home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
+arch-chroot /mnt git clone --depth 1 https://github.com/wbthomason/packer.nvim /home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
 umount -R /mnt
 
