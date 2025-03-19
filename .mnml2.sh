@@ -333,13 +333,6 @@ vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, s
 vim.api.nvim_set_keymap('n', '<Leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fb', ':Telescope buffers<CR>', { noremap = true, silent = true })
-
-vim.cmd [[
-  augroup PackerAutoQuit
-    autocmd!
-    autocmd User PackerComplete quitall
-  augroup END
-]]
 INITLUA
 
 cat <<BASHPROFILE >> /mnt/home/${2}/.bash_profile
@@ -390,8 +383,6 @@ curl -o /mnt/home/${2}/.wallpaper.jpeg https://images.pexels.com/photos/1183099/
 mkdir -p /mnt/home/${2}/.cache
 arch-chroot /mnt git clone --depth 1 https://github.com/wbthomason/packer.nvim /home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
-arch-chroot /mnt runuser -u ${2} -- nvim --headless +PackerSync
-arch-chroot /mnt runuser -u $USER -- sh -c "head -n -7 /home/${2}/.config/nvim/init.lua > /home/${2}/.config/nvim/init.lua.tmp && mv /home/${2}/.config/nvim/init.lua.tmp /home/${2}/.config/nvim/init.lua"
 umount -R /mnt
 
 clear
