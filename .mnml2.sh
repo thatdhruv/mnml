@@ -148,8 +148,12 @@ cat <<WAYBARCONFIG > ${CONFIG_DIR}/waybar/config
 	"position": "top",
 	"modules-left": ["hyprland/workspaces"],
 	"modules-center": ["hyprland/window"],
-	"modules-right": ["cpu", "memory", "clock"],
+	"modules-right": ["disk", "cpu", "memory", "clock"],
 
+	"disk": {
+ 		"interval": 1,
+   		"format": "DISK {free}",
+     		"path": "/"
 	"cpu": {
 		"format": "CPU {usage}%",
 		"tooltip": true
