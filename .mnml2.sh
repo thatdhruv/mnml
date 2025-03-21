@@ -154,6 +154,8 @@ cat <<WAYBARCONFIG > ${CONFIG_DIR}/waybar/config
  		"interval": 1,
    		"format": "DISK {free}",
      		"path": "/"
+	},
+
 	"cpu": {
 		"format": "CPU {usage}%",
 		"tooltip": true
