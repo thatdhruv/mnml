@@ -368,11 +368,13 @@ fi
 BASHPROFILE
 
 cat <<BASHRC >> /mnt/home/${2}/.bashrc
+alias b="source ~/.bashrc"
 alias c="cp -r"
 alias d="rm -rf"
 alias g="git clone"
 alias i="sudo pacman -S --needed --noconfirm"
 alias l="eza -al --icons"
+alias m="mkdir -p"
 alias u="sudo pacman -R --noconfirm -ss"
 alias v="nvim"
 
