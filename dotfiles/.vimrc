@@ -9,7 +9,7 @@ set smartindent
 set tabstop=4
 set termguicolors
 
-cal plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/plugged')
   Plug 'morhetz/gruvbox'
 
   Plug 'preservim/nerdtree'
