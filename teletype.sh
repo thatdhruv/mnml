@@ -78,39 +78,118 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-arch-chroot /mnt pacman -Sy --noconfirm --needed git vim terminus-font tmux
+arch-chroot /mnt pacman -Sy --noconfirm --needed clang git neovim nodejs npm rust terminus-font tmux unzip wget
 
-cat <<VIMRC >> /mnt/home/${2}/.vimrc
-set noexpandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+mkdir -p /mnt/home/${2}/.config/nvim
 
-set number
-set norelativenumber
+cat <<INITLUA >> /mnt/home/${2}/.config/nvim/init.lua
+vim.cmd([[packadd packer.nvim]])
 
-set autoindent
-set smartindent
-set backspace=indent,eol,start
-set scrolloff=3
-set noerrorbells
-set showcmd
-set showmode
-set ruler
-set laststatus=2
-set statusline=%F%m%r%h%w\\ [POS=%l,%c][%p%%]
+require('packer').startup(function()
+	use 'wbthomason/packer.nvim'
 
-set incsearch
-set hlsearch
+ 	use 'nvim-tree/nvim-tree.lua'
+	use 'nvim-lua/plenary.nvim'
+    	use 'nvim-telescope/telescope.nvim'
+     	use 'nvim-telescope/telescope-fzy-native.nvim'
+     	use 'nvim-treesitter/nvim-treesitter'
+      	use 'nvim-lualine/lualine.nvim'
+  	use 'neovim/nvim-lspconfig'
+   	use 'williamboman/mason.nvim'
+    	use 'williamboman/mason-lspconfig.nvim'
+     	use 'hrsh7th/nvim-cmp'
+      	use 'hrsh7th/cmp-nvim-lsp'
+       	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/cmp-path'
+ 	use 'saadparwaiz1/cmp_luasnip'
+  	use 'L3MON4D3/LuaSnip'
+   	use 'tpope/vim-fugitive'
+       	use 'kyazdani42/nvim-web-devicons'
+ 	use 'folke/tokyonight.nvim'
+  	use 'morhetz/gruvbox'
+  	use 'windwp/nvim-autopairs'
+end)
 
-set background=dark
+require('mason').setup()
+require('mason-lspconfig').setup({
+	ensure_installed = { 'asm_lsp', 'bashls', 'clangd', 'cssls', 'html', 'pyright', 'ts_ls' },
+	automatic_installation = true
+})
 
-set nobackup
-set nowritebackup
-set noswapfile
+local lspconfig = require('lspconfig')
+lspconfig.asm_lsp.setup{}
+lspconfig.bashls.setup{}
+lspconfig.clangd.setup{}
+lspconfig.cssls.setup{}
+lspconfig.html.setup{}
+lspconfig.pyright.setup{}
+lspconfig.ts_ls.setup{}
 
-set encoding=utf-8
-set fileencoding=utf-8
+local cmp = require('cmp')
+cmp.setup({
+	sources = {
+ 		{ name = 'nvim_lsp' },
+   		{ name = 'buffer' },
+     		{ name = 'path' },
+       		{ name = 'luasnip' }
+	}
+})
+
+require'nvim-treesitter.configs'.setup {
+	ensure_installed = { "bash", "c", "cpp", "css", "html", "javascript", "nasm", "python" },
+ 	hightlight = {
+  		enable = true,
+	},
+ 	indent = {
+  		enable = true,
+	}
+ }
+
+ require('lualine').setup({
+ 	options = {
+  		theme = 'gruvbox',
+    		section_separators = '',
+      		component_separators = '|',
+	},
+ })
+
+ require'nvim-tree'.setup {
+ 	disable_netrw = true,
+  	hijack_netrw = true,
+   	update_cwd = true,
+    	update_focused_file = {
+     		enable = true,
+       		update_cwd = true,
+	},
+ 	renderer = {
+  		highlight_opened_files = "all",
+    		icons = {
+      			show = {
+	 			git = true,
+     				folder = true,
+	 			file = true,
+     				folder_arrow = true
+	 		}
+    		}
+      	}
+}
+
+require("nvim-autopairs").setup({})
+
+vim.cmd[[colorscheme gruvbox]]
+
+vim.o.autoindent = true
+vim.o.number = true
+vim.o.shiftwidth = 4
+vim.o.smartindent = true
+vim.o.softtabstop = 4
+vim.o.tabstop = 4
+
+vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<Leader>ff', ':Telescope find_files<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fb', ':Telescope buffers<CR>', { noremap = true, silent = true })
 VIMRC
 
 cat <<TMUXCONF >> /mnt/home/${2}/.tmux.conf
@@ -185,15 +264,18 @@ alias i="sudo pacman -S --needed --noconfirm"
 alias l="ls -al --color=auto"
 alias m="mkdir -p"
 alias u="sudo pacman -R --noconfirm -ss"
-alias v="vim"
+alias v="nvim"
 
-alias vb="vim ~/.bashrc"
-alias vp="vim ~/.bash_profile"
+alias vb="nvim ~/.bashrc"
+alias vn="nvim ~/.config/nvim/init.lua"
+alias vp="nvim ~/.bash_profile"
 ### end of user-defined aliases ###
 
 PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
 BASHRC
 
+arch-chroot /mnt git clone --depth 1 https://github.com/wbthomason/packer.nvim /home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
+arch-chroot /mnt chown -R ${2}:${2} /home/${2}
 umount -R /mnt
 
 clear
