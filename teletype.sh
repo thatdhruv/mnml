@@ -89,9 +89,6 @@ vim.o.shiftwidth = 2
 vim.o.smartindent = true
 vim.o.softtabstop = 2
 vim.o.tabstop = 2
-
-vim.cmd('syntax enable')
-vim.o.termguicolors = true
 INITLUA
 
 cat <<TMUXCONF >> /mnt/home/${2}/.tmux.conf
