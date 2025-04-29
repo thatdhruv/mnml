@@ -139,7 +139,7 @@ set -g status-fg white
 set -g status-left-length 40
 set -g status-left "#[fg=green]#S"
 set -g status-right-length 90
-set -g status-right "#[fg=green]%a #[fg=cyan]%b %d %Y #[fg=yellow]%H:%M:%S"
+set -g status-right "#[fg=blue]%a #[fg=cyan]%b %d %Y #[fg=yellow]%H:%M:%S"
 
 setw -g window-status-format "#I:#W"
 setw -g window-status-current-format "#[fg=cyan,bold]#I:#W"
