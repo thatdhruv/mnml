@@ -104,7 +104,7 @@ bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
-bind | split-window h
+bind | split-window -h
 bind - split-window -v
 
 set -g status on
@@ -168,6 +168,7 @@ alias v="nvim"
 alias vb="nvim ~/.bashrc"
 alias vn="nvim ~/.config/nvim/init.lua"
 alias vp="nvim ~/.bash_profile"
+alias vt="nvim ~/.tmux.conf"
 ### end of user-defined aliases ###
 
 PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
