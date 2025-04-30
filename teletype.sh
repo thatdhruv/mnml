@@ -61,7 +61,7 @@ editor 0
 BOOTCFG
 
 ROOT_UUID=\$(blkid -s UUID -o value ${ROOT_PARTITION})
-KERNEL_OPTIONS="root=UUID=\${ROOT_UUID} rw"
+KERNEL_OPTIONS="root=UUID=\${ROOT_UUID} rw quit video=1920x1080 loglevel=3"
 
 cat <<ENTRY >/boot/loader/entries/arch.conf
 title	Boot Into teletype
