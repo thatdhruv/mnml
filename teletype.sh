@@ -78,28 +78,6 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-cat <<CHROOT >> /mnt/home/${2}/chroot.sh
-sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
-
-git clone https://aur.archlinux.org/fbterm
-cd fbterm
-makepkg -si --noconfirm --needed
-sudo setcap cap_sys_tty_config+ep /usr/bin/fbterm
-rm -rf fbterm
-
-git clone https://aur.archlinux.org/fbv
-cd fbv
-makepkg -si --noconfirm --needed
-rm -rf fbv
-
-sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
-sudo sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
-CHROOT
-
-chmod +x /mnt/home/${2}/chroot.sh
-arch-chroot /mnt /usr/bin/runuser -u ${2} -- /home/${2}/chroot.sh
-rm -rf /mnt/home/${2}/chroot.sh
-
 mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
 curl -o /mnt/home/${2}/.wallpaper.jpg "https://raw.githubusercontent.com/thatdhruv/mnml/master/.wallpaper.jpg"
 
@@ -203,6 +181,7 @@ cat <<BASHRC >> /mnt/home/${2}/.bashrc
 ### start of user-defined aliases ###
 alias b="source ~/.bashrc"
 alias c="cp -r"
+alias e="emacs"
 alias d="rm -rf"
 alias g="git clone"
 alias i="sudo pacman -S --needed --noconfirm"
@@ -212,9 +191,18 @@ alias u="sudo pacman -R --noconfirm -ss"
 alias v="nvim"
 
 alias vb="nvim ~/.bashrc"
-alias vn="nvim ~/.config/nvim/init.lua"
+alias ve="nvim ~/.emacs"
+alias vf="nvim ~/.config/fbterm/fbtermrc"
 alias vp="nvim ~/.bash_profile"
 alias vt="nvim ~/.tmux.conf"
+alias vv="nvim ~/.config/nvim/init.lua"
+
+alias eb="emacs ~/.bashrc"
+alias ee="emacs ~/.emacs"
+alias ef="emacs ~/.config/fbterm/fbtermrc"
+alias ep="emacs ~/.bash_profile"
+alias et="emacs ~/.tmux.conf"
+alias ev="emacs ~/.config/nvim/init.lua"
 ### end of user-defined aliases ###
 
 mc() { mkdir -p "\$1" && cd "\$1"; }
@@ -241,7 +229,28 @@ cat <<EMACS >> /mnt/home/${2}/.emacs
 (prefer-coding-system 'utf-8)
 EMACS
 
-arch-chroot /mnt chown -R ${2}:${2} /home/${2}
+cat <<CHROOT >> /mnt/home/${2}/chroot.sh
+sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
+
+sudo chown -R ${2}:${2} /home/${2}
+git clone https://aur.archlinux.org/fbterm
+cd fbterm
+makepkg -si --noconfirm --needed
+sudo setcap cap_sys_tty_config+ep /usr/bin/fbterm
+rm -rf fbterm
+
+git clone https://aur.archlinux.org/fbv
+cd fbv
+makepkg -si --noconfirm --needed
+rm -rf fbv
+
+sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+sudo sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+CHROOT
+
+chmod +x /mnt/home/${2}/chroot.sh
+arch-chroot /mnt /usr/bin/runuser -u ${2} -- /home/${2}/chroot.sh
+rm -rf /mnt/home/${2}/chroot.sh
 umount -R /mnt
 
 clear
