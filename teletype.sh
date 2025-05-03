@@ -78,7 +78,7 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-arch-chroot /mnt /usr/bin/runuser -u ${2} <<CHROOT
+arch-chroot /mnt /usr/bin/runuser -u ${2} -- <<CHROOT
 sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 git clone https://aur.archlinux.org/fbterm
