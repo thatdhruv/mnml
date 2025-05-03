@@ -78,17 +78,27 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
+mkdir -p /mnt/home/${2}/.config/{emacs,fbterm,nvim,tmux}
 curl -o /mnt/home/${2}/.wallpaper.jpg "https://raw.githubusercontent.com/thatdhruv/mnml/master/.wallpaper.jpg"
 
-cat <<INITLUA >> /mnt/home/${2}/.config/nvim/init.lua
-vim.o.autoindent = true
-vim.o.number = true
-vim.o.shiftwidth = 2
-vim.o.smartindent = true
-vim.o.softtabstop = 2
-vim.o.tabstop = 2
-INITLUA
+cat <<INITEL >> /mnt/home/${2}/.config/emacs/init.el
+(menu-bar-mode -1)
+
+(setq inhibit-startup-message t)
+(global-display-line-numbers-mode t)
+(global-font-lock-mode t)
+(save-place-mode 1)
+(global-auto-revert-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(load-theme 'wombat t)
+
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq-default major-mode 'text-mode)
+(setq initial-major-mode 'text-mode)
+(setq initial-scratch-message nil)
+(prefer-coding-system 'utf-8)
+INITEL
 
 cat <<FBTERMRC >> /mnt/home/${2}/.config/fbterm/fbtermrc
 font-names=xos4 Terminus:style=Bold
@@ -124,7 +134,16 @@ word-chars=._-
 screen-rotate=0
 FBTERMRC
 
-cat <<TMUXCONF >> /mnt/home/${2}/.tmux.conf
+cat <<INITLUA >> /mnt/home/${2}/.config/nvim/init.lua
+vim.o.autoindent = true
+vim.o.number = true
+vim.o.shiftwidth = 2
+vim.o.smartindent = true
+vim.o.softtabstop = 2
+vim.o.tabstop = 2
+INITLUA
+
+cat <<TMUXCONF >> /mnt/home/${2}/.config/tmux/tmux.conf
 unbind C-b
 
 set-option -g prefix C-j
@@ -210,27 +229,8 @@ mc() { mkdir -p "\$1" && cd "\$1"; }
 PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
 BASHRC
 
-cat <<EMACS >> /mnt/home/${2}/.emacs
-(menu-bar-mode -1)
-
-(setq inhibit-startup-message t)
-(global-display-line-numbers-mode t)
-(global-font-lock-mode t)
-(save-place-mode 1)
-(global-auto-revert-mode 1)
-(fset 'yes-or-no-p 'y-or-n-p)
-(load-theme 'wombat t)
-
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-(setq-default major-mode 'text-mode)
-(setq initial-major-mode 'text-mode)
-(setq initial-scratch-message nil)
-(prefer-coding-system 'utf-8)
-EMACS
-
 cat <<CHROOT >> /mnt/home/${2}/chroot.sh
-sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
+sudo pacman -Sy --noconfirm --needed clang emacs-nox git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 sudo chown -R ${2}:${2} /home/${2}
 cd /home/${2}
