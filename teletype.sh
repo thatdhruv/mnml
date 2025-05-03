@@ -70,7 +70,7 @@ initrd	/initramfs-linux.img
 options	\${KERNEL_OPTIONS}
 ENTRY
 
-useradd -m -G video,wheel -s /bin/bash ${2}
+useradd -m -G wheel,video -s /bin/bash ${2}
 echo "${2}:${3}" | chpasswd
 
 sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
@@ -237,12 +237,14 @@ cd /home/${2}
 git clone https://aur.archlinux.org/fbterm
 cd fbterm
 makepkg -si --noconfirm --needed
+cd /home/${2}
 sudo setcap cap_sys_tty_config+ep /usr/bin/fbterm
 rm -rf fbterm
 
 git clone https://aur.archlinux.org/fbv
 cd fbv
 makepkg -si --noconfirm --needed
+cd /home/${2}
 rm -rf fbv
 
 sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
