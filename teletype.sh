@@ -101,7 +101,7 @@ cat <<INITEL >> /mnt/home/${2}/.config/emacs/init.el
 INITEL
 
 cat <<FBTERMRC >> /mnt/home/${2}/.config/fbterm/fbtermrc
-font-names=xos4 Terminus:style=Bold
+font-names=JetBrainMono Nerd Font Mono,JetBrainsMono NFM:style=Bold
 font-size=18
 
 color-0=000000
@@ -204,23 +204,23 @@ alias e="emacs"
 alias d="rm -rf"
 alias g="git clone"
 alias i="sudo pacman -S --needed --noconfirm"
-alias l="ls -al --color=auto"
+alias l="eza -al --icons"
 alias m="mkdir -p"
 alias u="sudo pacman -R --noconfirm -ss"
 alias v="nvim"
 
 alias vb="nvim ~/.bashrc"
-alias ve="nvim ~/.emacs"
+alias ve="nvim ~/.config/emacs/init.el"
 alias vf="nvim ~/.config/fbterm/fbtermrc"
 alias vp="nvim ~/.bash_profile"
-alias vt="nvim ~/.tmux.conf"
+alias vt="nvim ~/.config/tmux/tmux.conf"
 alias vv="nvim ~/.config/nvim/init.lua"
 
 alias eb="emacs ~/.bashrc"
-alias ee="emacs ~/.emacs"
+alias ee="emacs ~/.config/emacs/init.el"
 alias ef="emacs ~/.config/fbterm/fbtermrc"
 alias ep="emacs ~/.bash_profile"
-alias et="emacs ~/.tmux.conf"
+alias et="emacs ~/.config/tmux/tmux.conf"
 alias ev="emacs ~/.config/nvim/init.lua"
 ### end of user-defined aliases ###
 
@@ -230,7 +230,7 @@ PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
 BASHRC
 
 cat <<CHROOT >> /mnt/home/${2}/chroot.sh
-sudo pacman -Sy --noconfirm --needed clang emacs-nox git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
+sudo pacman -Sy --noconfirm --needed clang emacs-nox git imagemagick neovim nodejs npm rust tmux ttf-jetbrains-mono-nerd unzip wget
 
 sudo chown -R ${2}:${2} /home/${2}
 cd /home/${2}
