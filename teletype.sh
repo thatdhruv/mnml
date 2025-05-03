@@ -61,7 +61,7 @@ editor 0
 BOOTCFG
 
 ROOT_UUID=\$(blkid -s UUID -o value ${ROOT_PARTITION})
-KERNEL_OPTIONS="root=UUID=\${ROOT_UUID} rw quit video=1920x1080 loglevel=3"
+KERNEL_OPTIONS="root=UUID=\${ROOT_UUID} rw quiet video=1920x1080 loglevel=3"
 
 cat <<ENTRY >/boot/loader/entries/arch.conf
 title	Boot Into teletype
@@ -165,7 +165,7 @@ TMUXCONF
 
 cat <<BASH_PROFILE >> /mnt/home/${2}/.bash_profile
 
-if [[ "$(tty)" = "/dev/tty1" ]]; then
+if [[ "\$(tty)" = "/dev/tty1" ]]; then
 	echo -ne "\e[?25l"
 	fbv -cuiker ".wallpaper.jpg" << EOF
 	q
