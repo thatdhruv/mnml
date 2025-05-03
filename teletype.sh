@@ -29,7 +29,7 @@ mount ${ROOT_PARTITION} /mnt
 mkdir -p /mnt/boot
 mount ${EFI_PARTITION} /mnt/boot
 
-pacstrap /mnt base base-devel linux linux-firmware systemd sudo
+pacstrap /mnt base base-devel linux linux-firmware systemd sudo git
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -70,17 +70,27 @@ initrd	/initramfs-linux.img
 options	\${KERNEL_OPTIONS}
 ENTRY
 
-useradd -m -G wheel -s /bin/bash ${2}
+useradd -m -G video,wheel -s /bin/bash ${2}
 echo "${2}:${3}" | chpasswd
 
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
+
+git clone https://aur.archlinux.org/fbterm
+cd fbterm
+makepkg -si --noconfirm --needed
+setcap cap_sys_tty_config+ep /usr/bin/fbterm
+
+git clone https://aur.archlinux.org/fbv
+cd fbv
+makepkg -si --noconfirm --needed
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-arch-chroot /mnt pacman -Sy --noconfirm --needed clang git neovim nodejs npm rust terminus-font tmux unzip wget
+arch-chroot /mnt pacman -Sy --noconfirm --needed clang emacs imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
-mkdir -p /mnt/home/${2}/.config/nvim
+mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
+curl -o /mnt/home/${2}/.wallpaper.png "https://.png"
 
 cat <<INITLUA >> /mnt/home/${2}/.config/nvim/init.lua
 vim.o.autoindent = true
@@ -91,7 +101,46 @@ vim.o.softtabstop = 2
 vim.o.tabstop = 2
 INITLUA
 
+cat <<FBTERMRC >> /mnt/home/${2}/.config/fbterm/fbtermrc
+font-names=xos4 Terminus:style=Bold
+font-size=18
+
+color-0=000000
+color-1=e78284
+color-2=a6d189
+color-3=ffffbb
+color-4=899bdf
+color-5=ca9ee6
+color-6=8bbec2
+color-7=cccccc
+color-8=555555
+color-9=ef9f9f
+color-10=b5e8b0
+color-11=ffff00
+color-12=a6b9ef
+color-13=d0a8ef
+color-14=99d1db
+color-15=ffffff
+
+color-foreground=7
+color-background=0
+
+history-lines=0
+
+cursor-shape=1
+cursor-interval=300
+
+word-chars=._-
+
+screen-rotate=0
+FBTERMRC
+
 cat <<TMUXCONF >> /mnt/home/${2}/.tmux.conf
+unbind C-b
+
+set-option -g prefix C-j
+bind C-j send-prefix
+
 set-option -g status-position top
 
 set-option -g repeat-time 300
@@ -107,48 +156,34 @@ bind l select-pane -R
 bind | split-window -h
 bind - split-window -v
 
+bind r source-file ~/.tmux.conf
+
 set -g status on
 set -g status-interval 1
 set -g status-justify centre
 
-set -g status-bg black
-set -g status-fg white
+set -g status-bg white
+set -g status-fg black
 
 set -g status-left-length 40
-set -g status-left "#[fg=green]#S"
+set -g status-left "#S"
 set -g status-right-length 90
-set -g status-right "#[fg=blue]%a #[fg=cyan]%b %d %Y #[fg=yellow]%H:%M:%S"
+set -g status-right "%a %b %d %Y %H:%M:%S"
 
-setw -g window-status-format "#I:#W"
-setw -g window-status-current-format "#[fg=cyan,bold]#I:#W"
-
-set-option -g bell-action none
+setw -g window-status-format "#[bold]#I:#W"
+setw -g window-status-current-format "#I:#W"
 TMUXCONF
 
 cat <<BASH_PROFILE >> /mnt/home/${2}/.bash_profile
 
-if [[ "\$(tty)" = "/dev/tty1" ]]; then
- 	setfont ter-v16b
-
-	echo -en "\e]P0000000"
-	echo -en "\e]P1cc242d"
-	echo -en "\e]P298972a"
-	echo -en "\e]P3d79931"
-	echo -en "\e]P4458598"
-	echo -en "\e]P5b16296"
-	echo -en "\e]P6689d7a"
-	echo -en "\e]P7a89994"
-	echo -en "\e]P8928384"
-	echo -en "\e]P9fb4944"
-	echo -en "\e]PAb8bb36"
-	echo -en "\e]PBfabd3f"
-	echo -en "\e]PC83a5a8"
-	echo -en "\e]PDd386ab"
-	echo -en "\e]PE8ec08c"
-	echo -en "\e]PFffffff"
-	clear
-
-	tmux new-session -A -s "\$(tty)"
+if [[ "$(tty)" = "/dev/tty1" ]]; then
+	echo -ne "\e[?25l"
+	fbv -cuiker ".wallpaper.png" << EOF
+	q
+EOF
+	shift
+	export FBTERM_BACKGROUND_IMAGE=1
+	exec fbterm -- tmux new-session -A -s "\$(tty)"
 fi
 BASH_PROFILE
 
@@ -171,8 +206,29 @@ alias vp="nvim ~/.bash_profile"
 alias vt="nvim ~/.tmux.conf"
 ### end of user-defined aliases ###
 
+mc() { mkdir -p "\$1" && cd "\$1"; }
+
 PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
 BASHRC
+
+cat <<EMACS >> /mnt/home/${2}/.emacs
+(menu-bar-mode -1)
+
+(setq inhibit-startup-message t)
+(global-display-line-numbers-mode t)
+(global-font-lock-mode t)
+(save-place-mode 1)
+(global-auto-revert-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(load-theme 'wombat t)
+
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq-default major-mode 'text-mode)
+(setq initial-major-mode 'text-mode)
+(setq initial-scratch-message nil)
+(prefer-coding-system 'utf-8)
+EMACS
 
 arch-chroot /mnt chown -R ${2}:${2} /home/${2}
 umount -R /mnt
