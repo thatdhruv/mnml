@@ -73,21 +73,28 @@ ENTRY
 useradd -m -G video,wheel -s /bin/bash ${2}
 echo "${2}:${3}" | chpasswd
 
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
+EOF
+ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
+
+arch-chroot /mnt /usr/bin/runuser ${2} <<CHROOT
+sudo pacman -Sy --noconfirm --needed clang emacs imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 git clone https://aur.archlinux.org/fbterm
 cd fbterm
 makepkg -si --noconfirm --needed
-setcap cap_sys_tty_config+ep /usr/bin/fbterm
+sudo setcap cap_sys_tty_config+ep /usr/bin/fbterm
+rm -rf fbterm
 
 git clone https://aur.archlinux.org/fbv
 cd fbv
 makepkg -si --noconfirm --needed
-EOF
-ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
+rm -rf fbv
 
-arch-chroot /mnt pacman -Sy --noconfirm --needed clang emacs imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
+sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+sudo sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+CHROOT
 
 mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
 curl -o /mnt/home/${2}/.wallpaper.jpg "https://raw.githubusercontent.com/thatdhruv/mnml/master/.wallpaper.jpg"
