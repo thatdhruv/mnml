@@ -96,7 +96,8 @@ sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoe
 sudo sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 CHROOT
 
-arch-chroot /mnt /usr/bin/runuser -u ${2} -- /mnt/home/${2}/chroot.sh
+chmod +x /mnt/home/${2}/chroot.sh
+arch-chroot /mnt /usr/bin/runuser -u ${2} -- /home/${2}/chroot.sh
 rm -rf /mnt/home/${2}/chroot.sh
 
 mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
