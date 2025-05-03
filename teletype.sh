@@ -29,7 +29,7 @@ mount ${ROOT_PARTITION} /mnt
 mkdir -p /mnt/boot
 mount ${EFI_PARTITION} /mnt/boot
 
-pacstrap /mnt base base-devel linux linux-firmware systemd sudo git
+pacstrap /mnt base base-devel linux linux-firmware systemd sudo
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -78,8 +78,8 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-arch-chroot /mnt /usr/bin/runuser ${2} <<CHROOT
-sudo pacman -Sy --noconfirm --needed clang emacs imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
+arch-chroot /mnt /usr/bin/runuser -u ${2} <<CHROOT
+sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 git clone https://aur.archlinux.org/fbterm
 cd fbterm
