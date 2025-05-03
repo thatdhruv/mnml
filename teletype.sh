@@ -78,7 +78,7 @@ sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 EOF
 ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 
-arch-chroot /mnt /usr/bin/runuser -u ${2} -- <<CHROOT
+cat <<CHROOT >> /mnt/home/${2}/chroot.sh
 sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 git clone https://aur.archlinux.org/fbterm
@@ -95,6 +95,9 @@ rm -rf fbv
 sudo sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 sudo sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 CHROOT
+
+arch-chroot /mnt /usr/bin/runuser -u ${2} -- /mnt/home/${2}/chroot.sh
+rm -rf /mnt/home/${2}/chroot.sh
 
 mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
 curl -o /mnt/home/${2}/.wallpaper.jpg "https://raw.githubusercontent.com/thatdhruv/mnml/master/.wallpaper.jpg"
