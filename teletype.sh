@@ -90,7 +90,7 @@ ln -sf ../run/systemd/resolve/stub-resolv.conf /mnt/etc/resolv.conf
 arch-chroot /mnt pacman -Sy --noconfirm --needed clang emacs imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 mkdir -p /mnt/home/${2}/.config/{nvim,fbterm}
-curl -o /mnt/home/${2}/.wallpaper.png "https://.png"
+curl -o /mnt/home/${2}/.wallpaper.jpg "https://raw.githubusercontent.com/thatdhruv/mnml/master/.wallpaper.jpg"
 
 cat <<INITLUA >> /mnt/home/${2}/.config/nvim/init.lua
 vim.o.autoindent = true
@@ -178,7 +178,7 @@ cat <<BASH_PROFILE >> /mnt/home/${2}/.bash_profile
 
 if [[ "$(tty)" = "/dev/tty1" ]]; then
 	echo -ne "\e[?25l"
-	fbv -cuiker ".wallpaper.png" << EOF
+	fbv -cuiker ".wallpaper.jpg" << EOF
 	q
 EOF
 	shift
