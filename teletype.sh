@@ -233,6 +233,7 @@ cat <<CHROOT >> /mnt/home/${2}/chroot.sh
 sudo pacman -Sy --noconfirm --needed clang emacs git imagemagick neovim nodejs npm rust terminus-font tmux unzip wget
 
 sudo chown -R ${2}:${2} /home/${2}
+cd /home/${2}
 git clone https://aur.archlinux.org/fbterm
 cd fbterm
 makepkg -si --noconfirm --needed
