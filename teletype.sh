@@ -230,7 +230,7 @@ PS1='\e[0;31m\u\e[m@\e[0;34m\h \e[0;32m\w \e[0;35m\\\$ \e[m'
 BASHRC
 
 cat <<CHROOT >> /mnt/home/${2}/chroot.sh
-sudo pacman -Sy --noconfirm --needed clang emacs-nox git imagemagick neovim nodejs npm rust tmux ttf-jetbrains-mono-nerd unzip wget
+sudo pacman -Sy --noconfirm --needed clang emacs-nox eza git imagemagick neovim nodejs npm rust tmux ttf-jetbrains-mono-nerd unzip wget
 
 sudo chown -R ${2}:${2} /home/${2}
 cd /home/${2}
