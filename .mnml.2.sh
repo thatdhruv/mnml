@@ -20,6 +20,6 @@ sudo make install
 cp -r $HOME/mnml/dotfiles/. $HOME/.
 chmod +x $HOME/.scripts/*.sh
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+git clone --depth 1 https://github.com/wbthomason/packer.nvim /home/${2}/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 centered_message "MNML Phase 2 - Completed! Proceeding Towards Phase 3..."
