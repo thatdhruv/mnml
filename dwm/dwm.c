@@ -35,6 +35,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
+#include <X11/Xresource.h>
 #include <X11/Xutil.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
@@ -50,15 +51,31 @@
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
+#define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+#define XRDB_LOAD_COLOR(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
+                                  if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
+                                    int i = 1; \
+                                    for (; i <= 6; i++) { \
+                                      if (value.addr[i] < 48) break; \
+                                      if (value.addr[i] > 57 && value.addr[i] < 65) break; \
+                                      if (value.addr[i] > 70 && value.addr[i] < 97) break; \
+                                      if (value.addr[i] > 102) break; \
+                                    } \
+                                    if (i == 7) { \
+                                      strncpy(V, value.addr, 7); \
+                                      V[7] = '\0'; \
+                                    } \
+                                  } \
+                                }
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeN /* keeplast */ }; /* color schemes */
+enum { SchemeNorm, SchemeSel }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -177,6 +194,7 @@ static void grabkeys(void);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
+static void loadxrdb(void);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -201,7 +219,6 @@ static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
-static void setscheme(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
@@ -232,6 +249,7 @@ static Monitor *wintomon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
+static void xrdb(const Arg *arg);
 static void zoom(const Arg *arg);
 
 /* variables */
@@ -262,7 +280,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 static Atom wmatom[WMLast], netatom[NetLast];
 static int running = 1;
 static Cur *cursor[CurLast];
-static Clr **schemes, **scheme;
+static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
@@ -486,9 +504,9 @@ cleanup(void)
 		cleanupmon(mons);
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors) * SchemeN; i++)
-		free(schemes[i]);
-	free(schemes);
+	for (i = 0; i < LENGTH(colors); i++)
+		free(scheme[i]);
+	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
 	drw_free(drw);
 	XSync(dpy, False);
@@ -1029,6 +1047,34 @@ killclient(const Arg *arg)
 }
 
 void
+loadxrdb()
+{
+	Display *display;
+	char *resm;
+	XrmDatabase xrdb;
+	char *type;
+	XrmValue value;
+
+	display = XOpenDisplay(NULL);
+
+	if (display != NULL) {
+		resm = XResourceManagerString(display);
+
+		if (resm != NULL) {
+			xrdb = XrmGetStringDatabase(resm);
+
+			if (xrdb != NULL) {
+				XRDB_LOAD_COLOR("dwm.col_accent", col_accent);
+				XRDB_LOAD_COLOR("dwm.col_background", col_background);
+				XRDB_LOAD_COLOR("dwm.col_foreground", col_foreground);
+			}
+		}
+	}
+
+	XCloseDisplay(display);
+}
+
+void
 manage(Window w, XWindowAttributes *wa)
 {
 	Client *c, *t = NULL;
@@ -1536,60 +1582,10 @@ setmfact(const Arg *arg)
 	arrange(selmon);
 }
 
-static const char *
-xftcolor_to_hex(XftColor c)
-{
-	char *hex = malloc(8);
-	snprintf(hex, 8, "#%02x%02x%02x", c.color.red >> 8, c.color.green >> 8, c.color.blue >> 8);
-	return hex;
-}
-
-void
-setscheme(const Arg *arg)
-{
-	ptrdiff_t si = (scheme - schemes) + arg->i * SchemeN;
-	
-	/* wrap around, won't work if (abs(arg->i) > LENGTH(colors)) */
-	if (si < 0)
-		si += LENGTH(colors) * SchemeN;
-	else if (si >= LENGTH(colors) * SchemeN)
-		si -= LENGTH(colors) * SchemeN;
-	
-	scheme = &schemes[si];
-	drawbars();
-	
-	if (selmon->sel) {
-		Client *c = selmon-> sel;
-		if (c->bw > 0)
-			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][1].pixel);
-	}
-	
-	arrange(selmon);
-	
-	dmenucmd[6] = xftcolor_to_hex(scheme[SchemeNorm][1]);
-	dmenucmd[8] = xftcolor_to_hex(scheme[SchemeNorm][0]);
-	dmenucmd[10] = xftcolor_to_hex(scheme[SchemeSel][1]);
-	dmenucmd[12] = xftcolor_to_hex(scheme[SchemeSel][0]);
-	
-	if (strcmp(dmenucmd[10], col_acc_light) == 0) {
-		system("feh --bg-scale $HOME/.wallpaper.light.jpg");
-		system("dunstctl reload $HOME/.config/dunst/light");
-		system("pidof st | xargs kill -s USR1");
-		system("sed -i 's/^set background=dark/set background=light/' $HOME/.vimrc");
-		system("vim --servername VIM --remote-send '<Esc>:source $MYVIMRC<CR>'");
-	} else  {
-		system("feh --bg-scale $HOME/.wallpaper.dark.jpg");
-		system("dunstctl reload $HOME/.config/dunst/dark");
-		system("pidof st | xargs kill -s USR1");
-		system("sed -i 's/^set background=light/set background=dark/' $HOME/.vimrc");
-		system("vim --servername VIM --remote-send '<Esc>:source $MYVIMRC<CR>'");
-	}
-}
-
 void
 setup(void)
 {
-	int i, j;
+	int i;
 	XSetWindowAttributes wa;
 	Atom utf8string;
 	struct sigaction sa;
@@ -1634,12 +1630,9 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	schemes = ecalloc(LENGTH(colors), SchemeN * sizeof(Clr *));
-	for (j = LENGTH(colors) - 1; j >= 0; j--) {
-		scheme = &schemes[j * SchemeN];
-		for (i = 0; i < SchemeN; i++)
-			scheme[i] = drw_scm_create(drw, colors[j][i], 3);
-	}
+	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	for (i = 0; i < LENGTH(colors); i++)
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -1904,7 +1897,7 @@ updatebarpos(Monitor *m)
 }
 
 void
-updateclientlist(void)
+updateclientlist()
 {
 	Client *c;
 	Monitor *m;
@@ -2182,6 +2175,17 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 }
 
 void
+xrdb(const Arg *arg)
+{
+	loadxrdb();
+	int i;
+	for (i = 0; i < LENGTH(colors); i++)
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
+	focus(NULL);
+	arrange(NULL);
+}
+
+void
 zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
@@ -2205,6 +2209,8 @@ main(int argc, char *argv[])
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	checkotherwm();
+	XrmInitialize();
+	loadxrdb();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)

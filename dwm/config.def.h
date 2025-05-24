@@ -8,24 +8,14 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrains Mono Nerd Font Mono:style=bold:size=14" };
 static const char dmenufont[]       = "JetBrains Mono Nerd Font Mono:style=bold:size=14";
 
-static const char col_acc_dark[]    = "#cc6666";
-static const char col_bg_dark[]     = "#222222";
-static const char col_fg_dark[]     = "#ffffff";
+static char col_accent[]      = "#cc6666";
+static char col_background[]  = "#222222";
+static char col_foreground[]  = "#ffffff";
 
-static const char col_acc_light[]   = "#007aff";
-static const char col_bg_light[]    = "#ffffff";
-static const char col_fg_light[]    = "#222222";
-
-static const char *colors[][SchemeN][3] = {
-		/*               fg         bg         border   */
-	{ /* dark */
-		[SchemeNorm] = { col_fg_dark, col_bg_dark, col_bg_dark },
-		[SchemeSel]  = { col_bg_dark, col_acc_dark, col_acc_dark },
-	},
-	{ /* light */
-		[SchemeNorm] = { col_fg_light, col_bg_light, col_bg_light },
-		[SchemeSel]  = { col_bg_light, col_acc_light, col_acc_light },
-	},
+static char *colors[][3]      = {
+	/*               fg              bg              border   */
+	[SchemeNorm] = { col_foreground, col_background, col_background },
+	[SchemeSel]  = { col_background, col_accent,     col_accent },
 };
 
 /* tagging */
@@ -55,7 +45,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod4Mask /* Mod1Mask = Alt/Opt/Meta, Mod4Mask = Cmd/Super/Win */
+#define MODKEY Mod1Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -67,24 +57,13 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-
-static const char *dmenucmd[] = {
-	"dmenu_run",
-	"-m", dmenumon,
-	"-fn", dmenufont,
-	"-nb", col_bg_dark,
-	"-nf", col_fg_dark,
-	"-sb", col_acc_dark,
-	"-sf", col_bg_dark,
-	NULL
-};
-
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_background, "-nf", col_foreground, "-sb", col_accent, "-sf", col_background, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
-static const char *firefoxcmd[] = { "firefox", NULL };
-static const char *mutecmd[] = { "pamixer", "-t", NULL };
+static const char *firefoxcmd[]  = { "firefox", NULL };
+static const char *mutecmd[]     = { "pamixer", "-t", NULL };
 static const char *poweroffcmd[] = { "poweroff", NULL };
-static const char *scrotcmd[] = { "scrot", NULL };
+static const char *scrotcmd[]    = { "scrot", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -111,7 +90,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_s,      setscheme,      {.i = +1 } },
+	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
