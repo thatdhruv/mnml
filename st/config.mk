@@ -32,7 +32,7 @@ STLDFLAGS = $(LIBS) $(LDFLAGS)
 #LIBS = -L$(X11LIB) -lm -lX11 -lutil -lXft \
 #       `$(PKG_CONFIG) --libs fontconfig` \
 #       `$(PKG_CONFIG) --libs freetype2` \
-#       `$(PKG_CONFIG) --libs harfbuzz` \
+#       `$(PKG_CONFIG) --libs harfbuzz`
 #MANPREFIX = ${PREFIX}/man
 
 # compiler and linker

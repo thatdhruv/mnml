@@ -12,13 +12,18 @@
 #define DEFAULT(a, b)		(a) = (a) ? (a) : (b)
 #define LIMIT(x, a, b)		(x) = (x) < (a) ? (a) : (x) > (b) ? (b) : (x)
 #define ATTRCMP(a, b)		(((a).mode & (~ATTR_WRAP)) != ((b).mode & (~ATTR_WRAP)) || \
-				(a).fg != (b).fg || (a).bg != (b).bg)
+				(a).fg != (b).fg || \
+				(a).bg != (b).bg)
 #define TIMEDIFF(t1, t2)	((t1.tv_sec-t2.tv_sec)*1000 + \
 				(t1.tv_nsec-t2.tv_nsec)/1E6)
 #define MODBIT(x, set, bit)	((set) ? ((x) |= (bit)) : ((x) &= ~(bit)))
 
 #define TRUECOLOR(r,g,b)	(1 << 24 | (r) << 16 | (g) << 8 | (b))
 #define IS_TRUECOL(x)		(1 << 24 & (x))
+
+#define HEX_TO_INT(c)		((c) >= '0' && (c) <= '9' ? (c) - '0' : \
+							(c) >= 'a' && (c) <= 'f' ? (c) - 'a' + 10 : \
+							(c) >= 'A' && (c) <= 'F' ? (c) - 'A' + 10 : -1)
 
 enum glyph_attribute {
 	ATTR_NULL       = 0,
@@ -34,6 +39,8 @@ enum glyph_attribute {
 	ATTR_WIDE       = 1 << 9,
 	ATTR_WDUMMY     = 1 << 10,
 	ATTR_BOLD_FAINT = ATTR_BOLD | ATTR_FAINT,
+	ATTR_URL		= 1 << 14,
+	ATTR_DIRTYUNDERLINE = 1 << 15,
 };
 
 enum selection_mode {
@@ -65,6 +72,8 @@ typedef struct {
 	ushort mode;      /* attribute flags */
 	uint32_t fg;      /* foreground  */
 	uint32_t bg;      /* background  */
+	int ustyle;	  /* underline style */
+	int ucolor[3];    /* underline color */
 } Glyph;
 
 typedef Glyph *Line;
@@ -90,8 +99,6 @@ int tattrset(int);
 void tnew(int, int);
 void tresize(int, int);
 void tsetdirtattr(int);
-void tupdatebgcolor(int, int);
-void tupdatefgcolor(int, int);
 void ttyhangup(void);
 int ttynew(const char *, char *, const char *, char **);
 size_t ttyread(void);
@@ -106,6 +113,10 @@ void selstart(int, int, int);
 void selextend(int, int, int, int);
 int selected(int, int);
 char *getsel(void);
+
+void highlighturls(void);
+void unhighlighturls(void);
+void followurl(int, int);
 
 size_t utf8encode(Rune, char *);
 
@@ -126,3 +137,7 @@ extern unsigned int tabspaces;
 extern unsigned int defaultfg;
 extern unsigned int defaultbg;
 extern unsigned int defaultcs;
+extern char *urlhandler;
+extern char urlchars[];
+extern char *urlprefixes[];
+extern int nurlprefixes;
