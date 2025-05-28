@@ -21,10 +21,6 @@
 #define TRUECOLOR(r,g,b)	(1 << 24 | (r) << 16 | (g) << 8 | (b))
 #define IS_TRUECOL(x)		(1 << 24 & (x))
 
-#define HEX_TO_INT(c)		((c) >= '0' && (c) <= '9' ? (c) - '0' : \
-							(c) >= 'a' && (c) <= 'f' ? (c) - 'a' + 10 : \
-							(c) >= 'A' && (c) <= 'F' ? (c) - 'A' + 10 : -1)
-
 enum glyph_attribute {
 	ATTR_NULL       = 0,
 	ATTR_BOLD       = 1 << 0,
@@ -39,8 +35,6 @@ enum glyph_attribute {
 	ATTR_WIDE       = 1 << 9,
 	ATTR_WDUMMY     = 1 << 10,
 	ATTR_BOLD_FAINT = ATTR_BOLD | ATTR_FAINT,
-	ATTR_URL		= 1 << 14,
-	ATTR_DIRTYUNDERLINE = 1 << 15,
 };
 
 enum selection_mode {
@@ -72,8 +66,6 @@ typedef struct {
 	ushort mode;      /* attribute flags */
 	uint32_t fg;      /* foreground  */
 	uint32_t bg;      /* background  */
-	int ustyle;	  /* underline style */
-	int ucolor[3];    /* underline color */
 } Glyph;
 
 typedef Glyph *Line;
@@ -114,10 +106,6 @@ void selextend(int, int, int, int);
 int selected(int, int);
 char *getsel(void);
 
-void highlighturls(void);
-void unhighlighturls(void);
-void followurl(int, int);
-
 size_t utf8encode(Rune, char *);
 
 void *xmalloc(size_t);
@@ -137,7 +125,3 @@ extern unsigned int tabspaces;
 extern unsigned int defaultfg;
 extern unsigned int defaultbg;
 extern unsigned int defaultcs;
-extern char *urlhandler;
-extern char urlchars[];
-extern char *urlprefixes[];
-extern int nurlprefixes;
