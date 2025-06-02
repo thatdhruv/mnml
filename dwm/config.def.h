@@ -8,11 +8,11 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrains Mono Nerd Font Mono:style=bold:size=14" };
 static const char dmenufont[]       = "JetBrains Mono Nerd Font Mono:style=bold:size=14";
 
-static char col_accent[]      = "#cc6666";
-static char col_background[]  = "#222222";
-static char col_foreground[]  = "#ffffff";
+static const char col_accent[]      = "#cc6666";
+static const char col_background[]  = "#222222";
+static const char col_foreground[]  = "#ffffff";
 
-static char *colors[][3]      = {
+static const char *colors[][3]      = {
 	/*               fg              bg              border   */
 	[SchemeNorm] = { col_foreground, col_background, col_background },
 	[SchemeSel]  = { col_background, col_accent,     col_accent },
@@ -90,7 +90,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
